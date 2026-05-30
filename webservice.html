@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebCraft — Custom Websites on Request</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0D0D0D;
+  --paper: #F5F2EC;
+  --cream: #EDE9DF;
+  --accent: #C84B31;
+  --accent2: #2D6A4F;
+  --muted: #7A7570;
+  --border: rgba(13,13,13,0.12);
+  --radius: 14px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; height: 64px;
+  background: rgba(245,242,236,0.85); backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta { background: var(--ink); color: var(--paper); border: none; border-radius: 999px; padding: 8px 20px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.2s; text-decoration: none; }
+.nav-cta:hover { background: var(--accent); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 8rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--cream); border: 0.5px solid var(--border);
+  border-radius: 999px; padding: 6px 16px; font-size: 12px;
+  color: var(--muted); margin-bottom: 2rem; letter-spacing: 0.5px; text-transform: uppercase;
+  animation: fadeUp 0.6s ease both;
+}
+.dot { width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hero h1 {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(42px, 7vw, 88px); line-height: 0.95;
+  letter-spacing: -2px; margin-bottom: 1.5rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 em { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--accent); font-weight: 400; }
+.hero-sub {
+  font-size: 17px; color: var(--muted); max-width: 480px;
+  line-height: 1.7; margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+.btn-primary { background: var(--ink); color: var(--paper); border: none; border-radius: 999px; padding: 14px 28px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+.btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+.btn-secondary { background: transparent; color: var(--ink); border: 0.5px solid var(--border); border-radius: 999px; padding: 14px 28px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+.btn-secondary:hover { background: var(--cream); }
+.hero-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin-top: 5rem; max-width: 700px; width: 100%;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.hero-stat { background: var(--cream); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: left; }
+.hero-stat .num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+.hero-stat .label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.bg-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25; pointer-events: none; z-index: -1; }
+.blob1 { width: 500px; height: 500px; background: #C84B31; top: -100px; right: -100px; }
+.blob2 { width: 400px; height: 400px; background: #2D6A4F; bottom: 0; left: -100px; }
+
+/* SERVICES */
+.section { padding: 6rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+.section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 1rem; }
+.section-title { font-family: 'Syne', sans-serif; font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -1px; margin-bottom: 3rem; line-height: 1.1; }
+.section-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--accent); }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.service-card {
+  background: var(--cream); border: 0.5px solid var(--border);
+  border-radius: var(--radius); padding: 28px;
+  transition: all 0.25s; cursor: default;
+}
+.service-card:hover { background: var(--ink); color: var(--paper); transform: translateY(-4px); }
+.service-card:hover .service-desc { color: rgba(245,242,236,0.6); }
+.service-card:hover .service-icon { background: rgba(255,255,255,0.1); }
+.service-icon { width: 44px; height: 44px; background: var(--paper); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; transition: background 0.25s; }
+.service-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+.service-desc { font-size: 13px; color: var(--muted); line-height: 1.6; transition: color 0.25s; }
+
+/* HOW IT WORKS */
+.how-section { background: var(--ink); color: var(--paper); padding: 6rem 2.5rem; }
+.how-inner { max-width: 1100px; margin: 0 auto; }
+.how-section .section-label { color: rgba(245,242,236,0.4); }
+.how-section .section-title { color: var(--paper); }
+.steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2px; margin-top: 3rem; }
+.step { padding: 32px; border: 0.5px solid rgba(245,242,236,0.1); position: relative; }
+.step-num { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: rgba(245,242,236,0.08); line-height: 1; margin-bottom: 16px; }
+.step-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+.step-desc { font-size: 13px; color: rgba(245,242,236,0.5); line-height: 1.6; }
+
+/* PRICING */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.pricing-card {
+  background: var(--cream); border: 0.5px solid var(--border);
+  border-radius: var(--radius); padding: 32px; display: flex; flex-direction: column; gap: 20px;
+  transition: transform 0.2s;
+}
+.pricing-card:hover { transform: translateY(-4px); }
+.pricing-card.featured { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pricing-card.featured .pricing-desc { color: rgba(245,242,236,0.5); }
+.pricing-card.featured .pricing-feature { border-color: rgba(245,242,236,0.1); color: rgba(245,242,236,0.7); }
+.pricing-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); font-weight: 500; }
+.pricing-card.featured .pricing-tag { color: #7EC8A4; }
+.pricing-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+.pricing-price { font-family: 'Syne', sans-serif; font-size: 38px; font-weight: 800; letter-spacing: -1px; }
+.pricing-price span { font-size: 16px; font-weight: 400; color: var(--muted); }
+.pricing-card.featured .pricing-price span { color: rgba(245,242,236,0.4); }
+.pricing-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.pricing-features { display: flex; flex-direction: column; gap: 0; flex: 1; }
+.pricing-feature { font-size: 13px; padding: 10px 0; border-bottom: 0.5px solid var(--border); color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.pricing-feature::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
+.pricing-card.featured .pricing-feature::before { color: #7EC8A4; }
+.pricing-btn { width: 100%; background: var(--ink); color: var(--paper); border: none; border-radius: 999px; padding: 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-top: auto; }
+.pricing-btn:hover { background: var(--accent); }
+.pricing-card.featured .pricing-btn { background: var(--paper); color: var(--ink); }
+.pricing-card.featured .pricing-btn:hover { background: var(--accent); color: var(--paper); }
+
+/* REQUEST FORM */
+.form-section { background: var(--cream); padding: 6rem 2.5rem; }
+.form-inner { max-width: 720px; margin: 0 auto; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 2.5rem; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+input, textarea, select {
+  background: var(--paper); border: 0.5px solid var(--border);
+  border-radius: 10px; padding: 12px 16px; font-size: 14px;
+  font-family: 'DM Sans', sans-serif; color: var(--ink);
+  transition: border-color 0.2s; outline: none; width: 100%;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--ink); }
+textarea { resize: vertical; min-height: 120px; }
+select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237A7570' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+.form-note { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.examples-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.example-pill { background: var(--paper); border: 0.5px solid var(--border); border-radius: 999px; padding: 4px 12px; font-size: 12px; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.example-pill:hover { border-color: var(--ink); color: var(--ink); }
+.submit-row { display: flex; align-items: center; gap: 16px; margin-top: 24px; }
+.submit-btn {
+  background: var(--ink); color: var(--paper); border: none; border-radius: 999px;
+  padding: 14px 32px; font-size: 14px; font-weight: 500;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+}
+.submit-btn:hover { background: var(--accent); transform: translateY(-1px); }
+.submit-note { font-size: 12px; color: var(--muted); }
+.success-msg { display: none; background: #E8F5EE; border: 0.5px solid #2D6A4F; border-radius: var(--radius); padding: 20px 24px; font-size: 14px; color: var(--accent2); margin-top: 16px; }
+.success-msg strong { display: block; font-weight: 600; margin-bottom: 4px; }
+
+/* EXAMPLES */
+.examples-section { padding: 6rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+.examples-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.example-card { border-radius: var(--radius); overflow: hidden; border: 0.5px solid var(--border); }
+.example-preview {
+  height: 160px; display: flex; align-items: center; justify-content: center;
+  font-size: 40px; position: relative; overflow: hidden;
+}
+.example-info { padding: 16px; background: var(--cream); }
+.example-info h4 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.example-info p { font-size: 12px; color: var(--muted); }
+.tag { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 999px; margin-top: 8px; }
+
+/* FAQ */
+.faq-section { background: var(--ink); color: var(--paper); padding: 6rem 2.5rem; }
+.faq-inner { max-width: 700px; margin: 0 auto; }
+.faq-section .section-label { color: rgba(245,242,236,0.4); }
+.faq-section .section-title { color: var(--paper); }
+.faq-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0; }
+.faq-item { border-bottom: 0.5px solid rgba(245,242,236,0.1); }
+.faq-q { width: 100%; background: none; border: none; color: var(--paper); font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; text-align: left; padding: 20px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.faq-arrow { font-size: 20px; transition: transform 0.2s; color: rgba(245,242,236,0.4); }
+.faq-item.open .faq-arrow { transform: rotate(45deg); color: var(--paper); }
+.faq-a { font-size: 14px; color: rgba(245,242,236,0.55); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+.faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+
+/* FOOTER */
+footer { padding: 3rem 2.5rem; border-top: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 16px; }
+.footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; }
+.footer-logo span { color: var(--accent); }
+.footer-note { font-size: 13px; color: var(--muted); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 600px) {
+  nav { padding: 0 1.25rem; }
+  .nav-links { display: none; }
+  .hero h1 { letter-spacing: -1.5px; }
+  .hero-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .hero-stat .num { font-size: 22px; }
+  .section { padding: 4rem 1.25rem; }
+  .how-section, .form-section, .faq-section { padding: 4rem 1.25rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.full { grid-column: 1; }
+  footer { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Web<span>Craft</span></div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#request">Request</a>
+  </div>
+  <a href="#request" class="nav-cta">Get started →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="hero-tag"><span class="dot"></span> Open for requests</div>
+  <h1>Your website,<br><em>built for you</em></h1>
+  <p class="hero-sub">Tell me what you need — a shop, portfolio, landing page, or anything else — and I'll build it for you.</p>
+  <div class="hero-btns">
+    <a href="#request" class="btn-primary">Request a website →</a>
+    <a href="#services" class="btn-secondary">See what I build</a>
+  </div>
+  <div class="hero-grid">
+    <div class="hero-stat"><div class="num">48h</div><div class="label">Avg. delivery</div></div>
+    <div class="hero-stat"><div class="num">100%</div><div class="label">Custom code</div></div>
+    <div class="hero-stat"><div class="num">Free</div><div class="label">Revisions</div></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-label">What I build</div>
+  <div class="section-title">Whatever you <em>need</em></div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🛍️</div>
+      <div class="service-name">Online Shops</div>
+      <div class="service-desc">Product listings, cart, checkout flow — fully interactive demo or connected to real payments.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎨</div>
+      <div class="service-name">Portfolios</div>
+      <div class="service-desc">Showcase your work, art, photography, or projects with a stunning personal site.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🚀</div>
+      <div class="service-name">Landing Pages</div>
+      <div class="service-desc">High-converting pages for products, apps, events, or anything you want to promote.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📋</div>
+      <div class="service-name">Business Sites</div>
+      <div class="service-desc">Professional websites for your business, service, or brand with contact forms and more.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎮</div>
+      <div class="service-name">Fun & Games</div>
+      <div class="service-desc">Interactive tools, mini-games, quizzes, calculators — if you can imagine it, I'll build it.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <div class="service-name">Dashboards</div>
+      <div class="service-desc">Data displays, admin panels, trackers, and any kind of interactive interface.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="how-inner">
+    <div class="section-label">The process</div>
+    <div class="section-title">Simple as <em>1, 2, 3</em></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Fill the request form</div>
+        <div class="step-desc">Tell me what you want — the type, style, colours, and any features. The more detail the better.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">I get to work</div>
+        <div class="step-desc">I'll build your website within 48 hours and send you a preview link to check it out.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Review & revise</div>
+        <div class="step-desc">You give feedback, I make tweaks until it's exactly how you want it. Free revisions included.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Get the files</div>
+        <div class="step-desc">Receive your finished HTML file ready to host on GitHub Pages, Netlify, or anywhere else.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="section-label">Pricing</div>
+  <div class="section-title">Simple, <em>fair</em> rates</div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div>
+        <div class="pricing-tag">Starter</div>
+        <div class="pricing-name">Basic Page</div>
+      </div>
+      <div class="pricing-price">Free <span>/ one page</span></div>
+      <div class="pricing-desc">A single-page site for simple needs. Great for trying things out.</div>
+      <div class="pricing-features">
+        <div class="pricing-feature">1 page</div>
+        <div class="pricing-feature">Responsive design</div>
+        <div class="pricing-feature">Contact form</div>
+        <div class="pricing-feature">GitHub Pages hosting guide</div>
+      </div>
+      <button class="pricing-btn" onclick="document.getElementById('request').scrollIntoView({behavior:'smooth'})">Request free →</button>
+    </div>
+    <div class="pricing-card featured">
+      <div>
+        <div class="pricing-tag">Most popular</div>
+        <div class="pricing-name">Full Site</div>
+      </div>
+      <div class="pricing-price">£25 <span>/ project</span></div>
+      <div class="pricing-desc">A complete multi-section site with everything you need to go live.</div>
+      <div class="pricing-features">
+        <div class="pricing-feature">Up to 5 sections</div>
+        <div class="pricing-feature">Custom design & colours</div>
+        <div class="pricing-feature">Interactive features</div>
+        <div class="pricing-feature">2 free revisions</div>
+        <div class="pricing-feature">Hosting setup help</div>
+      </div>
+      <button class="pricing-btn" onclick="document.getElementById('request').scrollIntoView({behavior:'smooth'})">Get started →</button>
+    </div>
+    <div class="pricing-card">
+      <div>
+        <div class="pricing-tag">Advanced</div>
+        <div class="pricing-name">Custom Build</div>
+      </div>
+      <div class="pricing-price">£50+ <span>/ project</span></div>
+      <div class="pricing-desc">Complex sites with special features, animations, or integrations.</div>
+      <div class="pricing-features">
+        <div class="pricing-feature">Unlimited sections</div>
+        <div class="pricing-feature">Advanced animations</div>
+        <div class="pricing-feature">Shop / booking systems</div>
+        <div class="pricing-feature">Unlimited revisions</div>
+        <div class="pricing-feature">Priority delivery</div>
+      </div>
+      <button class="pricing-btn" onclick="document.getElementById('request').scrollIntoView({behavior:'smooth'})">Let's talk →</button>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLES -->
+<section class="examples-section">
+  <div class="section-label">Recent work</div>
+  <div class="section-title">A few <em>examples</em></div>
+  <div class="examples-grid">
+    <div class="example-card">
+      <div class="example-preview" style="background:linear-gradient(135deg,#1D9E75,#085041)">🛍️</div>
+      <div class="example-info">
+        <h4>Demo Shop</h4>
+        <p>Product grid, cart, filters, checkout</p>
+        <span class="tag" style="background:#E1F5EE;color:#085041">E-commerce</span>
+      </div>
+    </div>
+    <div class="example-card">
+      <div class="example-preview" style="background:linear-gradient(135deg,#2C3E50,#4CA1AF)">🎨</div>
+      <div class="example-info">
+        <h4>Artist Portfolio</h4>
+        <p>Gallery, about, contact form</p>
+        <span class="tag" style="background:#EEF2FF;color:#4338CA">Portfolio</span>
+      </div>
+    </div>
+    <div class="example-card">
+      <div class="example-preview" style="background:linear-gradient(135deg,#C84B31,#E8956D)">🚀</div>
+      <div class="example-info">
+        <h4>App Landing Page</h4>
+        <p>Hero, features, pricing, CTA</p>
+        <span class="tag" style="background:#FEF3C7;color:#92400E">Landing</span>
+      </div>
+    </div>
+    <div class="example-card">
+      <div class="example-preview" style="background:linear-gradient(135deg,#5B21B6,#8B5CF6)">📊</div>
+      <div class="example-info">
+        <h4>Analytics Dashboard</h4>
+        <p>Charts, stats, live data display</p>
+        <span class="tag" style="background:#F3E8FF;color:#6D28D9">Dashboard</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUEST FORM -->
+<section class="form-section" id="request">
+  <div class="form-inner">
+    <div class="section-label">Get started</div>
+    <div class="section-title">Request your <em>website</em></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Your name</label>
+        <input type="text" id="f-name" placeholder="e.g. Alex Smith">
+      </div>
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" id="f-email" placeholder="you@email.com">
+      </div>
+      <div class="form-group">
+        <label>Type of website</label>
+        <select id="f-type">
+          <option value="">Select a type...</option>
+          <option>Online shop</option>
+          <option>Portfolio</option>
+          <option>Landing page</option>
+          <option>Business website</option>
+          <option>Dashboard</option>
+          <option>Blog</option>
+          <option>Game / interactive</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Budget</label>
+        <select id="f-budget">
+          <option value="">Select budget...</option>
+          <option>Free (basic page)</option>
+          <option>£25 (full site)</option>
+          <option>£50+ (custom build)</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Describe your website</label>
+        <textarea id="f-desc" placeholder="Tell me what you want — pages, sections, colours, style, features, anything you have in mind..."></textarea>
+        <div class="form-note">Need inspiration? Click an example:</div>
+        <div class="examples-row">
+          <span class="example-pill" onclick="fillExample('A dark themed portfolio for a photographer with a gallery, about me section, and contact form')">📸 Photographer portfolio</span>
+          <span class="example-pill" onclick="fillExample('A shop selling handmade candles with product listings, a cart, and a contact page')">🕯️ Candle shop</span>
+          <span class="example-pill" onclick="fillExample('A landing page for a mobile app with features, pricing tiers, and a waitlist signup')">📱 App landing page</span>
+          <span class="example-pill" onclick="fillExample('A simple business website for a plumber with services, pricing, and a booking form')">🔧 Trades business</span>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>Style preferences</label>
+        <input type="text" id="f-style" placeholder="e.g. minimal, dark, colourful, professional, fun, retro...">
+      </div>
+      <div class="form-group full">
+        <label>Anything else?</label>
+        <input type="text" id="f-extra" placeholder="Specific colours, fonts, inspiration sites, deadline...">
+      </div>
+    </div>
+    <div class="submit-row">
+      <button class="submit-btn" onclick="submitForm()">Send request →</button>
+      <span class="submit-note">I'll get back to you within 24 hours</span>
+    </div>
+    <div class="success-msg" id="success-msg">
+      <strong>🎉 Request received!</strong>
+      Thanks for reaching out. I'll review your request and get back to you within 24 hours with a plan and timeline.
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="section-label">FAQ</div>
+    <div class="section-title">Common <em>questions</em></div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How long does it take? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Most sites are delivered within 48 hours. Simpler pages can be done same-day. More complex builds with lots of features may take 3–5 days. I'll always give you a timeline upfront.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What do I get at the end? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">You'll receive a complete HTML file (and any supporting files) that you own 100%. I'll also help you get it live on GitHub Pages, Netlify, or wherever you want to host it — for free.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Can I request changes after delivery? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Yes! All plans include free revisions. Basic gets 1, Full Site gets 2, and Custom builds get unlimited. I want you to be happy with the result.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Do I need to know how to code? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Not at all. Just tell me what you want in plain English. I handle all the technical stuff and will explain anything you need to know in simple terms.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How do I pay? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">After I review your request and we agree on the details, I'll send you a payment link. Payment is made before delivery for paid plans. The basic free page requires no payment at all.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Web<span>Craft</span></div>
+  <div class="footer-note">Built with care · Custom websites on request</div>
+</footer>
+
+<script>
+function fillExample(text) {
+  document.getElementById('f-desc').value = text;
+  document.getElementById('f-desc').focus();
+}
+
+async function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const type = document.getElementById('f-type').value;
+  const desc = document.getElementById('f-desc').value.trim();
+  if (!name || !email || !type || !desc) {
+    alert('Please fill in your name, email, website type, and description.');
+    return;
+  }
+
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const data = {
+    name,
+    email,
+    'website-type': type,
+    budget: document.getElementById('f-budget').value,
+    description: desc,
+    style: document.getElementById('f-style').value.trim(),
+    extra: document.getElementById('f-extra').value.trim(),
+  };
+
+  try {
+    const res = await fetch('https://formspree.io/f/xjgzdyoy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      document.getElementById('success-msg').style.display = 'block';
+      document.getElementById('success-msg').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      ['f-name','f-email','f-style','f-extra','f-desc'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('f-type').value = '';
+      document.getElementById('f-budget').value = '';
+      btn.textContent = 'Sent ✓';
+    } else {
+      alert('Something went wrong. Please try again.');
+      btn.textContent = 'Send request →';
+      btn.disabled = false;
+    }
+  } catch (e) {
+    alert('Network error. Please check your connection and try again.');
+    btn.textContent = 'Send request →';
+    btn.disabled = false;
+  }
+}
+
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// Animate sections on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = 1; e.target.style.transform = 'translateY(0)'; } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.service-card, .step, .pricing-card, .example-card').forEach(el => {
+  el.style.opacity = 0; el.style.transform = 'translateY(20px)'; el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
